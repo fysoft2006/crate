@@ -21,36 +21,8 @@
 
 package io.crate.operation.reference.information;
 
-import io.crate.metadata.ReferenceImplementation;
-import io.crate.metadata.ReferenceInfo;
-import org.apache.lucene.util.BytesRef;
+import io.crate.operation.reference.NestedObjectExpression;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-public class TablesNestedObjectExpression extends InformationTablesExpression<Map<String, Object>> {
-    protected final Map<String, InformationTablesExpression> childImplementations = new HashMap<>();
-
-    public TablesNestedObjectExpression(ReferenceInfo info) {
-        super(info);
-    }
-
-    @Override
-    public ReferenceImplementation getChildImplementation(String name) {
-        return childImplementations.get(name);
-    }
-
-    @Override
-    public Map<String,Object> value() {
-        Map<String, Object> map = new HashMap<>();
-        for (Map.Entry<String, InformationTablesExpression> e : childImplementations.entrySet()) {
-            Object value = e.getValue().value();
-            if (value != null && value instanceof BytesRef) {
-                value = ((BytesRef)value).utf8ToString();
-            }
-            map.put(e.getKey(), value);
-        }
-        return Collections.unmodifiableMap(map);
-    }
+public abstract class TablesNestedObjectExpression extends NestedObjectExpression {
 }
