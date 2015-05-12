@@ -45,6 +45,17 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ColumnIdent CLUSTERED_BY = new ColumnIdent("clustered_by");
         public static final ColumnIdent PARTITIONED_BY = new ColumnIdent("partitioned_by");
         public static final ColumnIdent BLOBS_PATH = new ColumnIdent("blobs_path");
+        public static final ColumnIdent TABLE_SETTINGS = new ColumnIdent("settings");
+        public static final ColumnIdent TABLE_SETTINGS_BLOCKS = new ColumnIdent("settings",
+                ImmutableList.of("blocks"));
+        public static final ColumnIdent TABLE_SETTINGS_BLOCKS_READ_ONLY = new ColumnIdent("settings",
+                ImmutableList.of("blocks", "read_only"));
+        public static final ColumnIdent TABLE_SETTINGS_BLOCKS_READ = new ColumnIdent("settings",
+                ImmutableList.of("blocks", "read"));
+        public static final ColumnIdent TABLE_SETTINGS_BLOCKS_WRITE = new ColumnIdent("settings",
+                ImmutableList.of("blocks", "write"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG = new ColumnIdent("settings",
+                ImmutableList.of("translog"));
     }
 
     public static class ReferenceInfos {
@@ -55,6 +66,17 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ReferenceInfo CLUSTERED_BY = info(Columns.CLUSTERED_BY, DataTypes.STRING);
         public static final ReferenceInfo PARTITIONED_BY = info(Columns.PARTITIONED_BY, new ArrayType(DataTypes.STRING));
         public static final ReferenceInfo BLOBS_PATH = info(Columns.BLOBS_PATH, DataTypes.STRING);
+        public static final ReferenceInfo TABLE_SETTINGS = info(Columns.TABLE_SETTINGS, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_BLOCKS = info(
+                Columns.TABLE_SETTINGS_BLOCKS, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_READ_ONLY = info(
+                Columns.TABLE_SETTINGS_BLOCKS_READ_ONLY, DataTypes.BOOLEAN);
+        public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_READ = info(
+                Columns.TABLE_SETTINGS_BLOCKS_READ, DataTypes.BOOLEAN);
+        public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_WRITE = info(
+                Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.BOOLEAN);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG = info(
+                Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.OBJECT);
     }
 
     private static ReferenceInfo info(ColumnIdent columnIdent, DataType dataType) {
@@ -66,23 +88,25 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 IDENT,
                 ImmutableList.of(Columns.SCHEMA_NAME, Columns.TABLE_NAME),
                 ImmutableMap.<ColumnIdent, ReferenceInfo>builder()
-                    .put(Columns.SCHEMA_NAME, ReferenceInfos.SCHEMA_NAME)
-                    .put(Columns.TABLE_NAME, ReferenceInfos.TABLE_NAME)
-                    .put(Columns.NUMBER_OF_SHARDS, ReferenceInfos.NUMBER_OF_SHARDS)
-                    .put(Columns.NUMBER_OF_REPLICAS, ReferenceInfos.NUMBER_OF_REPLICAS)
-                    .put(Columns.CLUSTERED_BY, ReferenceInfos.CLUSTERED_BY)
-                    .put(Columns.PARTITIONED_BY, ReferenceInfos.PARTITIONED_BY)
-                    .put(Columns.BLOBS_PATH, ReferenceInfos.BLOBS_PATH)
-                .build(),
+                        .put(Columns.SCHEMA_NAME, ReferenceInfos.SCHEMA_NAME)
+                        .put(Columns.TABLE_NAME, ReferenceInfos.TABLE_NAME)
+                        .put(Columns.NUMBER_OF_SHARDS, ReferenceInfos.NUMBER_OF_SHARDS)
+                        .put(Columns.NUMBER_OF_REPLICAS, ReferenceInfos.NUMBER_OF_REPLICAS)
+                        .put(Columns.CLUSTERED_BY, ReferenceInfos.CLUSTERED_BY)
+                        .put(Columns.PARTITIONED_BY, ReferenceInfos.PARTITIONED_BY)
+                        .put(Columns.BLOBS_PATH, ReferenceInfos.BLOBS_PATH)
+                        .put(Columns.TABLE_SETTINGS, ReferenceInfos.TABLE_SETTINGS)
+                        .build(),
                 ImmutableList.<ReferenceInfo>builder()
-                    .add(ReferenceInfos.SCHEMA_NAME)
-                    .add(ReferenceInfos.TABLE_NAME)
-                    .add(ReferenceInfos.NUMBER_OF_SHARDS)
-                    .add(ReferenceInfos.NUMBER_OF_REPLICAS)
-                    .add(ReferenceInfos.CLUSTERED_BY)
-                    .add(ReferenceInfos.PARTITIONED_BY)
-                    .add(ReferenceInfos.BLOBS_PATH)
-                .build()
+                        .add(ReferenceInfos.SCHEMA_NAME)
+                        .add(ReferenceInfos.TABLE_NAME)
+                        .add(ReferenceInfos.NUMBER_OF_SHARDS)
+                        .add(ReferenceInfos.NUMBER_OF_REPLICAS)
+                        .add(ReferenceInfos.CLUSTERED_BY)
+                        .add(ReferenceInfos.PARTITIONED_BY)
+                        .add(ReferenceInfos.BLOBS_PATH)
+                        .add(ReferenceInfos.TABLE_SETTINGS)
+                        .build()
         );
     }
 }

@@ -22,6 +22,7 @@
 package io.crate.operation.reference.information;
 
 import io.crate.metadata.ColumnIdent;
+import io.crate.metadata.ReferenceImplementation;
 import io.crate.metadata.ReferenceInfo;
 import io.crate.metadata.ReferenceInfos;
 import io.crate.metadata.blob.BlobTableInfo;
@@ -30,7 +31,10 @@ import io.crate.metadata.information.InformationTablesTableInfo;
 import io.crate.metadata.table.TableInfo;
 import org.apache.lucene.util.BytesRef;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public abstract class InformationTablesExpression<T>
@@ -43,6 +47,7 @@ public abstract class InformationTablesExpression<T>
     public static final TablesClusteredByExpression CLUSTERED_BY_EXPRESSION = new TablesClusteredByExpression();
     public static final TablesPartitionByExpression PARTITION_BY_EXPRESSION = new TablesPartitionByExpression();
     public static final TablesBlobPathExpression BLOB_PATH_EXPRESSION = new TablesBlobPathExpression();
+    public static final TablesSettingsExpression TABLES_SETTINGS_EXPRESSION = new TablesSettingsExpression();
 
     public InformationTablesExpression(ReferenceInfo info) {
         super(info);
@@ -151,6 +156,67 @@ public abstract class InformationTablesExpression<T>
             }
             return null;
         }
+    }
+
+    private static class TablesSettingsBlocksExpression extends TablesNestedObjectExpression {
+
+        public TablesSettingsBlocksExpression() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("read_only",
+                    new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_READ_ONLY) {
+                        @Override
+                        public Boolean value() {
+                            // todo: implementation
+                            return false;
+                        }
+                    });
+            childImplementations.put("read",
+                    new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_READ) {
+                        @Override
+                        public Boolean value() {
+                            // todo: implementation
+                            return false;
+                        }
+                    });
+            childImplementations.put("write",
+                    new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_WRITE) {
+                        @Override
+                        public Boolean value() {
+                            // todo: implementation
+                            return false;
+                        }
+                    });
+        }
+    }
+
+    private static class TablesSettingsTranslogExpression extends TablesNestedObjectExpression {
+
+        public TablesSettingsTranslogExpression() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+        }
+    }
+
+    private static class TablesSettingsExpression extends TablesNestedObjectExpression {
+
+        public TablesSettingsExpression() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("blocks", new TablesSettingsBlocksExpression());
+            childImplementations.put("translog", new TablesSettingsTranslogExpression());
+        }
+
+
     }
 }
 

@@ -34,6 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -769,6 +770,13 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
 
         execute("select sum(number_of_shards) from information_schema.tables");
         assertEquals(1, response.rowCount());
+    }
+
+    @Test
+    public void testTableSettings() throws Exception {
+        execute("create table table_props (name string) with (number_of_replicas=0)");
+        execute("select settings from information_schema.tables where table_name='table_props'");
+        assertEquals(Collections.emptyMap(), response.rows()[0][0]);
     }
 
     @Test

@@ -47,6 +47,7 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
         add(builder, InformationTablesExpression.CLUSTERED_BY_EXPRESSION);
         add(builder, InformationTablesExpression.PARTITION_BY_EXPRESSION);
         add(builder, InformationTablesExpression.BLOB_PATH_EXPRESSION);
+        add(builder, InformationTablesExpression.TABLES_SETTINGS_EXPRESSION);
 
                 // information_schema.columns
         add(builder, InformationColumnsExpression.SCHEMA_NAME_EXPRESSION);
