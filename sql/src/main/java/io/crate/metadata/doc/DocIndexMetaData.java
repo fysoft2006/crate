@@ -120,15 +120,24 @@ public class DocIndexMetaData {
         } else {
             this.defaultMappingMap = this.defaultMappingMetaData.sourceAsMap();
         }
-        this.tableParameters = ImmutableMap.<String, Object>of(TableParameterInfo.READ_ONLY,
-                settings.getAsBoolean(TableParameterInfo.READ_ONLY, CrateTableSettings.READ_ONLY.defaultValue()),
-                TableParameterInfo.BLOCKS_READ,
-                settings.getAsBoolean(TableParameterInfo.BLOCKS_READ, CrateTableSettings.BLOCKS_READ.defaultValue()),
-                TableParameterInfo.BLOCKS_WRITE,
-                settings.getAsBoolean(TableParameterInfo.BLOCKS_WRITE, CrateTableSettings.BLOCKS_WRITE.defaultValue()),
-                TableParameterInfo.BLOCKS_METADATA,
-                settings.getAsBoolean(TableParameterInfo.BLOCKS_METADATA, CrateTableSettings.BLOCKS_METADATA.defaultValue())
-        );
+        this.tableParameters = ImmutableMap.<String,Object>builder()
+                .put(TableParameterInfo.READ_ONLY,
+                        settings.getAsBoolean(TableParameterInfo.READ_ONLY, CrateTableSettings.READ_ONLY.defaultValue()))
+                .put(TableParameterInfo.BLOCKS_READ,
+                        settings.getAsBoolean(TableParameterInfo.BLOCKS_READ, CrateTableSettings.BLOCKS_READ.defaultValue()))
+                .put(TableParameterInfo.BLOCKS_WRITE,
+                        settings.getAsBoolean(TableParameterInfo.BLOCKS_WRITE, CrateTableSettings.BLOCKS_WRITE.defaultValue()))
+                .put(TableParameterInfo.BLOCKS_METADATA,
+                        settings.getAsBoolean(TableParameterInfo.BLOCKS_METADATA, CrateTableSettings.BLOCKS_METADATA.defaultValue()))
+                .put(TableParameterInfo.FLUSH_THRESHOLD_OPS,
+                        settings.getAsInt(TableParameterInfo.FLUSH_THRESHOLD_OPS, CrateTableSettings.FLUSH_THRESHOLD_OPS.defaultValue()))
+                .put(TableParameterInfo.FLUSH_THRESHOLD_PERIOD,
+                        settings.getAsTime(TableParameterInfo.FLUSH_THRESHOLD_PERIOD, CrateTableSettings.FLUSH_THRESHOLD_PERIOD.defaultValue()))
+                .put(TableParameterInfo.FLUSH_THRESHOLD_SIZE,
+                        settings.getAsBytesSize(TableParameterInfo.FLUSH_THRESHOLD_SIZE, CrateTableSettings.FLUSH_THRESHOLD_SIZE.defaultValue()))
+                .put(TableParameterInfo.FLUSH_DISABLE,
+                        settings.getAsBoolean(TableParameterInfo.FLUSH_DISABLE, CrateTableSettings.FLUSH_DISABLE.defaultValue()))
+                .build();
 
         prepareCrateMeta();
     }
