@@ -25,6 +25,8 @@ import io.crate.analyze.TableParameterInfo;
 import io.crate.metadata.information.InformationTablesTableInfo;
 import io.crate.metadata.table.TableInfo;
 import io.crate.operation.reference.RowCollectNestedObjectExpression;
+import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.unit.TimeValue;
 
 public class TablesSettingsExpression extends RowCollectNestedObjectExpression<TableInfo> {
 
@@ -102,14 +104,16 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
                     new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_SIZE) {
                         @Override
                         public String value() {
-                            return this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_SIZE).toString();
+                            ByteSizeValue value = (ByteSizeValue) this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_SIZE);
+                            return value != null ? value.toString() : null;
                         }
                     });
             childImplementations.put("flush_threshold_period",
                     new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD) {
                         @Override
                         public String value() {
-                            return this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_PERIOD).toString();
+                            TimeValue value = (TimeValue) this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_PERIOD);
+                            return value != null ? value.toString() : null;
                         }
                     });
             childImplementations.put("disable_flush",
