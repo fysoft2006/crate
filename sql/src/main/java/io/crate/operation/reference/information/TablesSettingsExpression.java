@@ -21,8 +21,8 @@
 
 package io.crate.operation.reference.information;
 
+import io.crate.analyze.TableParameterInfo;
 import io.crate.metadata.information.InformationTablesTableInfo;
-import io.crate.metadata.settings.CrateTableSettings;
 import io.crate.metadata.table.TableInfo;
 import io.crate.operation.reference.RowCollectNestedObjectExpression;
 
@@ -55,28 +55,28 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
                     new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_READ_ONLY) {
                         @Override
                         public Boolean value() {
-                            return (Boolean) this.row.tableParameters().get(CrateTableSettings.READ_ONLY);
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.READ_ONLY);
                         }
                     });
             childImplementations.put("read",
                     new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_READ) {
                         @Override
                         public Boolean value() {
-                            return (Boolean) this.row.tableParameters().get(CrateTableSettings.BLOCKS_READ);
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.BLOCKS_READ);
                         }
                     });
             childImplementations.put("write",
                     new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_WRITE) {
                         @Override
                         public Boolean value() {
-                            return (Boolean) this.row.tableParameters().get(CrateTableSettings.BLOCKS_WRITE);
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.BLOCKS_WRITE);
                         }
                     });
             childImplementations.put("metadata",
                     new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_BLOCKS_METADATA) {
                         @Override
                         public Boolean value() {
-                            return (Boolean) this.row.tableParameters().get(CrateTableSettings.BLOCKS_METADATA);
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.BLOCKS_METADATA);
                         }
                     });
         }
