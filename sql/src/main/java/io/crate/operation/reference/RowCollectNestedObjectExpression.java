@@ -24,12 +24,17 @@ package io.crate.operation.reference;
 import io.crate.metadata.ReferenceImplementation;
 import io.crate.metadata.ReferenceInfo;
 import io.crate.metadata.RowCollectExpression;
+import org.apache.lucene.util.BytesRef;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RowCollectNestedObjectExpression<R> extends NestedObjectExpression implements RowCollectExpression<R, Map<String,Object>> {
     protected final ReferenceInfo info;
     protected R row;
+
+    protected final Map<String, RowCollectExpression> childImplementations = new HashMap<>();
 
     public RowCollectNestedObjectExpression(ReferenceInfo info) {
         this.info = info;
@@ -40,12 +45,24 @@ public abstract class RowCollectNestedObjectExpression<R> extends NestedObjectEx
         return info;
     }
 
-    @Override
-    public ReferenceImplementation getChildImplementation(String name) {
-        return null;
-    }
-
     public void setNextRow(R row) {
         this.row = row;
+    }
+
+    @Override
+    public Map<String,Object> value() {
+        Map<String, Object> map = new HashMap<>();
+        for (Map.Entry<String, RowCollectExpression> e : childImplementations.entrySet()) {
+            e.getValue().setNextRow(this.row);
+            Object value = e.getValue().value();
+
+            // convert nested columns of type e.getValue().value() to String here
+            // as we do not want to convert them when building the response
+            if (value != null && value instanceof BytesRef) {
+                value = ((BytesRef)value).utf8ToString();
+            }
+            map.put(e.getKey(), value);
+        }
+        return Collections.unmodifiableMap(map);
     }
 }

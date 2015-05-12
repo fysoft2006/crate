@@ -55,6 +55,8 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("blocks", "read"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_WRITE = new ColumnIdent("settings",
                 ImmutableList.of("blocks", "write"));
+        public static final ColumnIdent TABLE_SETTINGS_BLOCKS_METADATA = new ColumnIdent("settings",
+                ImmutableList.of("blocks", "metadata"));
     }
 
     public static class ReferenceInfos {
@@ -74,6 +76,8 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 Columns.TABLE_SETTINGS_BLOCKS_READ, DataTypes.BOOLEAN);
         public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_WRITE = info(
                 Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.BOOLEAN);
+        public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_METADATA = info(
+                Columns.TABLE_SETTINGS_BLOCKS_METADATA, DataTypes.BOOLEAN);
     }
 
     private static ReferenceInfo info(ColumnIdent columnIdent, DataType dataType) {

@@ -24,9 +24,12 @@ package io.crate.metadata.doc;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.*;
 import io.crate.Constants;
+import io.crate.analyze.TableParameter;
+import io.crate.analyze.TableParameterInfo;
 import io.crate.core.NumberOfReplicas;
 import io.crate.exceptions.TableAliasSchemaException;
 import io.crate.metadata.*;
+import io.crate.metadata.settings.CrateTableSettings;
 import io.crate.metadata.table.ColumnPolicy;
 import io.crate.planner.RowGranularity;
 import io.crate.types.ArrayType;
@@ -71,6 +74,7 @@ public class DocIndexMetaData {
     private final TableIdent ident;
     private final int numberOfShards;
     private final BytesRef numberOfReplicas;
+    private final ImmutableMap<String, Object> tableProperties;
     private Map<String, Object> metaMap;
     private Map<String, Object> metaColumnsMap;
     private Map<String, Object> indicesMap;
@@ -108,7 +112,7 @@ public class DocIndexMetaData {
         this.metaData = metaData;
         this.isAlias = !metaData.getIndex().equals(ident.esName());
         this.numberOfShards = metaData.numberOfShards();
-        Settings settings = metaData.getSettings();
+        final Settings settings = metaData.getSettings();
         this.numberOfReplicas = NumberOfReplicas.fromSettings(settings);
         this.aliases = ImmutableSet.copyOf(metaData.aliases().keys().toArray(String.class));
         this.defaultMappingMetaData = this.metaData.mappingOrDefault(Constants.DEFAULT_MAPPING_TYPE);
@@ -117,16 +121,23 @@ public class DocIndexMetaData {
         } else {
             this.defaultMappingMap = this.defaultMappingMetaData.sourceAsMap();
         }
+        this.tableProperties = ImmutableMap.<String, Object>of(TableParameterInfo.READ_ONLY,
+                settings.getAsBoolean(TableParameterInfo.READ_ONLY, CrateTableSettings.READ_ONLY.defaultValue()),
+                TableParameterInfo.BLOCKS_READ,
+                settings.getAsBoolean(TableParameterInfo.BLOCKS_READ, CrateTableSettings.BLOCKS_READ.defaultValue()),
+                TableParameterInfo.BLOCKS_WRITE,
+                settings.getAsBoolean(TableParameterInfo.BLOCKS_WRITE, CrateTableSettings.BLOCKS_WRITE.defaultValue()),
+                TableParameterInfo.BLOCKS_METADATA,
+                settings.getAsBoolean(TableParameterInfo.BLOCKS_METADATA, CrateTableSettings.BLOCKS_METADATA.defaultValue())
+        );
 
         prepareCrateMeta();
     }
-
 
     @SuppressWarnings("unchecked")
     private static <T> T getNested(Map map, String key) {
         return (T) map.get(key);
     }
-
 
     private void prepareCrateMeta() {
         metaMap = getNested(defaultMappingMap, "_meta");
@@ -543,5 +554,9 @@ public class DocIndexMetaData {
 
     public ColumnPolicy columnPolicy() {
         return columnPolicy;
+    }
+
+    public ImmutableMap<String, Object> tableProperties() {
+        return tableProperties;
     }
 }
