@@ -45,6 +45,7 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ColumnIdent CLUSTERED_BY = new ColumnIdent("clustered_by");
         public static final ColumnIdent PARTITIONED_BY = new ColumnIdent("partitioned_by");
         public static final ColumnIdent BLOBS_PATH = new ColumnIdent("blobs_path");
+
         public static final ColumnIdent TABLE_SETTINGS = new ColumnIdent("settings");
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS = new ColumnIdent("settings",
                 ImmutableList.of("blocks"));
@@ -54,8 +55,6 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("blocks", "read"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_WRITE = new ColumnIdent("settings",
                 ImmutableList.of("blocks", "write"));
-        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG = new ColumnIdent("settings",
-                ImmutableList.of("translog"));
     }
 
     public static class ReferenceInfos {
@@ -75,8 +74,6 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 Columns.TABLE_SETTINGS_BLOCKS_READ, DataTypes.BOOLEAN);
         public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_WRITE = info(
                 Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.BOOLEAN);
-        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG = info(
-                Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.OBJECT);
     }
 
     private static ReferenceInfo info(ColumnIdent columnIdent, DataType dataType) {

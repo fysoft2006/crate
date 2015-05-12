@@ -19,10 +19,33 @@
  * software solely pursuant to the terms of the relevant commercial agreement.
  */
 
-package io.crate.operation.reference.information;
+package io.crate.operation.reference;
 
-import io.crate.operation.reference.NestedObjectExpression;
+import io.crate.metadata.ReferenceImplementation;
+import io.crate.metadata.ReferenceInfo;
+import io.crate.metadata.RowCollectExpression;
 
+import java.util.Map;
 
-public abstract class TablesNestedObjectExpression extends NestedObjectExpression {
+public abstract class RowCollectNestedObjectExpression<R> extends NestedObjectExpression implements RowCollectExpression<R, Map<String,Object>> {
+    protected final ReferenceInfo info;
+    protected R row;
+
+    public RowCollectNestedObjectExpression(ReferenceInfo info) {
+        this.info = info;
+    }
+
+    @Deprecated
+    public ReferenceInfo info() {
+        return info;
+    }
+
+    @Override
+    public ReferenceImplementation getChildImplementation(String name) {
+        return null;
+    }
+
+    public void setNextRow(R row) {
+        this.row = row;
+    }
 }
