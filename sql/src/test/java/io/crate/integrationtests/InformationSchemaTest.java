@@ -776,7 +776,12 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
     public void testTableSettings() throws Exception {
         execute("create table table_props (name string) with (number_of_replicas=0)");
         execute("select settings from information_schema.tables where table_name='table_props'");
-        assertEquals(Collections.emptyMap(), response.rows()[0][0]);
+        assertEquals("{"+
+                        "translog={disable_flush=false, flush_threshold_period=30m, flush_threshold_ops=2147483647, flush_threshold_size=200mb}, "+
+                        "blocks={metadata=false, read=false, read_only=false, write=false}"+
+                        "}",
+
+                response.rows()[0][0].toString());
     }
 
     @Test

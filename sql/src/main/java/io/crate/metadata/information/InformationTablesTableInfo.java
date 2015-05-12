@@ -47,6 +47,7 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ColumnIdent BLOBS_PATH = new ColumnIdent("blobs_path");
 
         public static final ColumnIdent TABLE_SETTINGS = new ColumnIdent("settings");
+
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS = new ColumnIdent("settings",
                 ImmutableList.of("blocks"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_READ_ONLY = new ColumnIdent("settings",
@@ -57,6 +58,17 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("blocks", "write"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_METADATA = new ColumnIdent("settings",
                 ImmutableList.of("blocks", "metadata"));
+
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG = new ColumnIdent("settings",
+                ImmutableList.of("translog"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_OPS = new ColumnIdent("settings",
+                ImmutableList.of("translog", "flush_threshold_ops"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_SIZE = new ColumnIdent("settings",
+                ImmutableList.of("translog", "flush_threshold_size"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD = new ColumnIdent("settings",
+                ImmutableList.of("translog", "flush_threshold_period"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH = new ColumnIdent("settings",
+                ImmutableList.of("translog", "disable_flush"));
     }
 
     public static class ReferenceInfos {
@@ -67,7 +79,9 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ReferenceInfo CLUSTERED_BY = info(Columns.CLUSTERED_BY, DataTypes.STRING);
         public static final ReferenceInfo PARTITIONED_BY = info(Columns.PARTITIONED_BY, new ArrayType(DataTypes.STRING));
         public static final ReferenceInfo BLOBS_PATH = info(Columns.BLOBS_PATH, DataTypes.STRING);
+
         public static final ReferenceInfo TABLE_SETTINGS = info(Columns.TABLE_SETTINGS, DataTypes.OBJECT);
+
         public static final ReferenceInfo TABLE_SETTINGS_BLOCKS = info(
                 Columns.TABLE_SETTINGS_BLOCKS, DataTypes.OBJECT);
         public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_READ_ONLY = info(
@@ -78,6 +92,17 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 Columns.TABLE_SETTINGS_BLOCKS_WRITE, DataTypes.BOOLEAN);
         public static final ReferenceInfo TABLE_SETTINGS_BLOCKS_METADATA = info(
                 Columns.TABLE_SETTINGS_BLOCKS_METADATA, DataTypes.BOOLEAN);
+
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG = info(
+                Columns.TABLE_SETTINGS_TRANSLOG, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_OPS = info(
+                Columns.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_OPS, DataTypes.INTEGER);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_SIZE = info(
+                Columns.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_SIZE, DataTypes.LONG);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD = info(
+                Columns.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD, DataTypes.LONG);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH = info(
+                Columns.TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH, DataTypes.BOOLEAN);
     }
 
     private static ReferenceInfo info(ColumnIdent columnIdent, DataType dataType) {

@@ -26,7 +26,6 @@ import io.crate.metadata.information.InformationTablesTableInfo;
 import io.crate.metadata.table.TableInfo;
 import io.crate.operation.reference.RowCollectNestedObjectExpression;
 
-
 public class TablesSettingsExpression extends RowCollectNestedObjectExpression<TableInfo> {
 
     public final static String NAME = "settings";
@@ -38,7 +37,7 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
 
     private void addChildImplementations() {
         childImplementations.put(TablesSettingsBlocksExpression.NAME, new TablesSettingsBlocksExpression());
-        // todo all other settings
+        childImplementations.put(TablesSettingsTranslogExpression.NAME, new TablesSettingsTranslogExpression());
     }
 
     static class TablesSettingsBlocksExpression extends RowCollectNestedObjectExpression<TableInfo> {
@@ -82,4 +81,44 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
         }
     }
 
+    static class TablesSettingsTranslogExpression extends RowCollectNestedObjectExpression<TableInfo> {
+
+        public final static String NAME = "translog";
+
+        public TablesSettingsTranslogExpression() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("flush_threshold_ops",
+                    new InformationTablesExpression<Integer>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_OPS) {
+                        @Override
+                        public Integer value() {
+                            return (Integer) this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_OPS);
+                        }
+                    });
+            childImplementations.put("flush_threshold_size",
+                    new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_SIZE) {
+                        @Override
+                        public String value() {
+                            return this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_SIZE).toString();
+                        }
+                    });
+            childImplementations.put("flush_threshold_period",
+                    new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD) {
+                        @Override
+                        public String value() {
+                            return this.row.tableParameters().get(TableParameterInfo.FLUSH_THRESHOLD_PERIOD).toString();
+                        }
+                    });
+            childImplementations.put("disable_flush",
+                    new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH) {
+                        @Override
+                        public Boolean value() {
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.FLUSH_DISABLE);
+                        }
+                    });
+        }
+    }
 }
