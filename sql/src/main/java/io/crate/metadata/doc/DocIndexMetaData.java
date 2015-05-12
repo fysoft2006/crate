@@ -24,7 +24,6 @@ package io.crate.metadata.doc;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.*;
 import io.crate.Constants;
-import io.crate.analyze.TableParameter;
 import io.crate.analyze.TableParameterInfo;
 import io.crate.core.NumberOfReplicas;
 import io.crate.exceptions.TableAliasSchemaException;
@@ -74,7 +73,7 @@ public class DocIndexMetaData {
     private final TableIdent ident;
     private final int numberOfShards;
     private final BytesRef numberOfReplicas;
-    private final ImmutableMap<String, Object> tableProperties;
+    private final ImmutableMap<String, Object> tableParameters;
     private Map<String, Object> metaMap;
     private Map<String, Object> metaColumnsMap;
     private Map<String, Object> indicesMap;
@@ -121,7 +120,7 @@ public class DocIndexMetaData {
         } else {
             this.defaultMappingMap = this.defaultMappingMetaData.sourceAsMap();
         }
-        this.tableProperties = ImmutableMap.<String, Object>of(TableParameterInfo.READ_ONLY,
+        this.tableParameters = ImmutableMap.<String, Object>of(TableParameterInfo.READ_ONLY,
                 settings.getAsBoolean(TableParameterInfo.READ_ONLY, CrateTableSettings.READ_ONLY.defaultValue()),
                 TableParameterInfo.BLOCKS_READ,
                 settings.getAsBoolean(TableParameterInfo.BLOCKS_READ, CrateTableSettings.BLOCKS_READ.defaultValue()),
@@ -556,7 +555,7 @@ public class DocIndexMetaData {
         return columnPolicy;
     }
 
-    public ImmutableMap<String, Object> tableProperties() {
-        return tableProperties;
+    public ImmutableMap<String, Object> tableParameters() {
+        return tableParameters;
     }
 }
