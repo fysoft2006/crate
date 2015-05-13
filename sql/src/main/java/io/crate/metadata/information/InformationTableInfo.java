@@ -48,13 +48,12 @@ public class InformationTableInfo extends AbstractTableInfo {
     protected InformationTableInfo(InformationSchemaInfo schemaInfo,
                                  TableIdent ident,
                                  ImmutableList<ColumnIdent> primaryKeyIdentList,
-                                 ImmutableMap<ColumnIdent, ReferenceInfo> references,
-                                 ImmutableList<ReferenceInfo> columns) {
+                                 LinkedHashMap<ColumnIdent, ReferenceInfo> references) {
         super(schemaInfo);
         this.ident = ident;
         this.primaryKeyIdentList = primaryKeyIdentList;
-        this.references = references;
-        this.columns = columns;
+        this.references = ImmutableMap.copyOf(references);
+        this.columns = ImmutableList.copyOf(references.values());
         this.concreteIndices = new String[]{ident.esName()};
         Map<String, Map<String, List<Integer>>> locations = new TreeMap<>();
         Map<String, List<Integer>> tableLocation = new TreeMap<>();

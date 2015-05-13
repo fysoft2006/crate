@@ -43,7 +43,6 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
         childImplementations.put(TablesSettingsRecoveryInitialShards.NAME, new TablesSettingsRecoveryInitialShards());
         childImplementations.put(TablesSettingsWarmerEnabled.NAME, new TablesSettingsWarmerEnabled());
         childImplementations.put(TablesSettingsTranslogExpression.NAME, new TablesSettingsTranslogExpression());
-        // todo all other settings
     }
 
     static class TablesSettingsBlocksExpression extends RowCollectNestedObjectExpression<TableInfo> {

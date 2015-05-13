@@ -34,8 +34,7 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
 
     @Inject
     public InformationDocLevelReferenceResolver() {
-        ImmutableMap.Builder<ReferenceIdent, RowCollectExpression<?, ?>> builder =
-                ImmutableMap.builder();
+        ImmutableMap.Builder<ReferenceIdent, RowCollectExpression<?, ?>> builder = ImmutableMap.builder();
 
         // information_schema.tables
         builder.put(InformationTablesExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
@@ -54,7 +53,6 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
                 InformationTablesExpression.BLOB_PATH_EXPRESSION);
         builder.put(InformationTablesExpression.SETTINGS_EXPRESSION.info().ident(),
                 InformationTablesExpression.SETTINGS_EXPRESSION);
-        // child implementations missing!
 
                 // information_schema.columns
         builder.put(InformationColumnsExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
@@ -99,8 +97,8 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
                 InformationRoutinesExpression.ROUTINE_TYPE_EXPRESSION);
 
         // information_schema.schemata
-//        builder.put(InformationSchemataExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
-//                InformationSchemataExpression.SCHEMA_NAME_EXPRESSION);
+        builder.put(InformationSchemataExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
+                InformationSchemataExpression.SCHEMA_NAME_EXPRESSION);
 
         implementations = builder.build();
     }

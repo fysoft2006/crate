@@ -432,7 +432,7 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
     @Test
     public void testDefaultColumns() throws Exception {
         execute("select * from information_schema.columns order by schema_name, table_name");
-        assertEquals(212L, response.rowCount());
+        assertEquals(231L, response.rowCount());
     }
 
     @Test
@@ -775,16 +775,6 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
     @Test
     public void testTableSettings() throws Exception {
         execute("create table table_props (name string) with (number_of_replicas=0)");
-        execute("select settings from information_schema.tables where table_name='table_props'");
-//        assertEquals("{"+
-//                        "warmer={enabled=true}, " +
-//                        "translog={flush_threshold_ops=2147483647, flush_threshold_size=200mb, flush_threshold_period=30m, disable_flush=false, interval=5s}, "+
-//                        "blocks={read_only=false, write=false, read=false, metadata=false}, "+
-//                        "routing.allocation={enable=all, total_shards_per_node=-1}, " +
-//                        "recovery={initial_shards=quorum}"+
-//                        "}",
-//
-//                response.rows()[0][0].toString());
         execute("select settings['blocks'] from information_schema.tables where table_name='table_props'");
         assertEquals("{read_only=false, write=false, read=false, metadata=false}",
                 response.rows()[0][0].toString());

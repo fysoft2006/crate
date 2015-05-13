@@ -36,7 +36,7 @@ public abstract class InformationSchemataExpression<T> extends RowContextCollect
         super(info);
     }
 
-    private static class SchemataSchemaNameExpression extends InformationSchemataExpression<BytesRef> {
+    static class SchemataSchemaNameExpression extends InformationSchemataExpression<BytesRef> {
 
         protected SchemataSchemaNameExpression() {
             super(InformationSchemataTableInfo.ReferenceInfos.SCHEMA_NAME);
