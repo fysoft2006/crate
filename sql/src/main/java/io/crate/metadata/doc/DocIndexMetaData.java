@@ -24,6 +24,7 @@ package io.crate.metadata.doc;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.*;
 import io.crate.Constants;
+import io.crate.analyze.TableParameter;
 import io.crate.analyze.TableParameterInfo;
 import io.crate.core.NumberOfReplicas;
 import io.crate.exceptions.TableAliasSchemaException;
@@ -137,6 +138,16 @@ public class DocIndexMetaData {
                         settings.getAsBytesSize(TableParameterInfo.FLUSH_THRESHOLD_SIZE, CrateTableSettings.FLUSH_THRESHOLD_SIZE.defaultValue()))
                 .put(TableParameterInfo.FLUSH_DISABLE,
                         settings.getAsBoolean(TableParameterInfo.FLUSH_DISABLE, CrateTableSettings.FLUSH_DISABLE.defaultValue()))
+                .put(TableParameterInfo.TRANSLOG_INTERVAL,
+                        settings.getAsTime(TableParameterInfo.TRANSLOG_INTERVAL, CrateTableSettings.TRANSLOG_INTERVAL.defaultValue()))
+                .put(TableParameterInfo.ROUTING_ALLOCATION_ENABLE,
+                        settings.get(TableParameterInfo.ROUTING_ALLOCATION_ENABLE, CrateTableSettings.ROUTING_ALLOCATION_ENABLE.defaultValue()))
+                .put(TableParameterInfo.TOTAL_SHARDS_PER_NODE,
+                        settings.getAsInt(TableParameterInfo.TOTAL_SHARDS_PER_NODE, CrateTableSettings.TOTAL_SHARDS_PER_NODE.defaultValue()))
+                .put(TableParameterInfo.RECOVERY_INITIAL_SHARDS,
+                        settings.get(TableParameterInfo.RECOVERY_INITIAL_SHARDS, CrateTableSettings.RECOVERY_INITIAL_SHARDS.defaultValue()))
+                .put(TableParameterInfo.WARMER_ENABLED,
+                        settings.getAsBoolean(TableParameterInfo.WARMER_ENABLED, CrateTableSettings.WARMER_ENABLED.defaultValue()))
                 .build();
 
         prepareCrateMeta();

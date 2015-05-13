@@ -39,7 +39,11 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
 
     private void addChildImplementations() {
         childImplementations.put(TablesSettingsBlocksExpression.NAME, new TablesSettingsBlocksExpression());
+        childImplementations.put(TablesSettingsRoutingExpression.NAME, new TablesSettingsRoutingExpression());
+        childImplementations.put(TablesSettingsRecoveryInitialShards.NAME, new TablesSettingsRecoveryInitialShards());
+        childImplementations.put(TablesSettingsWarmerEnabled.NAME, new TablesSettingsWarmerEnabled());
         childImplementations.put(TablesSettingsTranslogExpression.NAME, new TablesSettingsTranslogExpression());
+        // todo all other settings
     }
 
     static class TablesSettingsBlocksExpression extends RowCollectNestedObjectExpression<TableInfo> {
@@ -83,6 +87,73 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
         }
     }
 
+    static class TablesSettingsRoutingExpression extends RowCollectNestedObjectExpression<TableInfo> {
+
+        public final static String NAME = "routing.allocation";
+
+        public TablesSettingsRoutingExpression() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("enable",
+                    new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE) {
+                        @Override
+                        public String value() {
+                            return (String) this.row.tableParameters().get(TableParameterInfo.ROUTING_ALLOCATION_ENABLE);
+                        }
+                    });
+            childImplementations.put("total_shards_per_node",
+                    new InformationTablesExpression<Integer>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE) {
+                        @Override
+                        public Integer value() {
+                            return (Integer) this.row.tableParameters().get(TableParameterInfo.TOTAL_SHARDS_PER_NODE);
+                        }
+                    });
+        }
+    }
+
+    static class TablesSettingsRecoveryInitialShards extends RowCollectNestedObjectExpression<TableInfo> {
+
+        public final static String NAME = "recovery";
+
+        public TablesSettingsRecoveryInitialShards() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_RECOVERY);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("initial_shards",
+                    new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS) {
+                        @Override
+                        public String value() {
+                            return (String) this.row.tableParameters().get(TableParameterInfo.RECOVERY_INITIAL_SHARDS);
+                        }
+                    });
+        }
+    }
+
+    static class TablesSettingsWarmerEnabled extends RowCollectNestedObjectExpression<TableInfo> {
+
+        public final static String NAME = "warmer";
+
+        public TablesSettingsWarmerEnabled() {
+            super(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_WARMER);
+            addChildImplementations();
+        }
+
+        private void addChildImplementations() {
+            childImplementations.put("enabled",
+                    new InformationTablesExpression<Boolean>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_WARMER_ENABLED) {
+                        @Override
+                        public Boolean value() {
+                            return (Boolean) this.row.tableParameters().get(TableParameterInfo.WARMER_ENABLED);
+                        }
+                    });
+        }
+    }
+
     static class TablesSettingsTranslogExpression extends RowCollectNestedObjectExpression<TableInfo> {
 
         public final static String NAME = "translog";
@@ -121,6 +192,14 @@ public class TablesSettingsExpression extends RowCollectNestedObjectExpression<T
                         @Override
                         public Boolean value() {
                             return (Boolean) this.row.tableParameters().get(TableParameterInfo.FLUSH_DISABLE);
+                        }
+                    });
+            childImplementations.put("interval",
+                    new InformationTablesExpression<String>(InformationTablesTableInfo.ReferenceInfos.TABLE_SETTINGS_TRANSLOG_INTERVAL) {
+                        @Override
+                        public String value() {
+                            TimeValue value = (TimeValue) this.row.tableParameters().get(TableParameterInfo.TRANSLOG_INTERVAL);
+                            return value != null ? value.toString() : null;
                         }
                     });
         }

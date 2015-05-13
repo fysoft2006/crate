@@ -58,6 +58,21 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("blocks", "write"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_METADATA = new ColumnIdent("settings",
                 ImmutableList.of("blocks", "metadata"));
+        public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION = new ColumnIdent("settings",
+                ImmutableList.of("routing_allocation"));
+        public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE = new ColumnIdent("settings",
+                ImmutableList.of("routing_allocation", "enable"));
+        public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE = new ColumnIdent("settings",
+                ImmutableList.of("routing_allocation", "total_shards_per_node"));
+        public static final ColumnIdent TABLE_SETTINGS_RECOVERY = new ColumnIdent("settings",
+                ImmutableList.of("recovery"));
+        public static final ColumnIdent TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS = new ColumnIdent("settings",
+                ImmutableList.of("recovery","initial_shards"));
+        public static final ColumnIdent TABLE_SETTINGS_WARMER = new ColumnIdent("settings",
+                ImmutableList.of("warmer"));
+        public static final ColumnIdent TABLE_SETTINGS_WARMER_ENABLED = new ColumnIdent("settings",
+                ImmutableList.of("warmer", "enabled"));
+
 
         public static final ColumnIdent TABLE_SETTINGS_TRANSLOG = new ColumnIdent("settings",
                 ImmutableList.of("translog"));
@@ -69,6 +84,8 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("translog", "flush_threshold_period"));
         public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH = new ColumnIdent("settings",
                 ImmutableList.of("translog", "disable_flush"));
+        public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_INTERVAL = new ColumnIdent("settings",
+                ImmutableList.of("translog", "interval"));
     }
 
     public static class ReferenceInfos {
@@ -103,6 +120,22 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 Columns.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD, DataTypes.LONG);
         public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH = info(
                 Columns.TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH, DataTypes.BOOLEAN);
+        public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_INTERVAL = info(
+                Columns.TABLE_SETTINGS_TRANSLOG_INTERVAL, DataTypes.LONG);
+        public static final ReferenceInfo TABLE_SETTINGS_ROUTING_ALLOCATION = info(
+                Columns.TABLE_SETTINGS_ROUTING_ALLOCATION, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE = info(
+                Columns.TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE = info(
+                Columns.TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_RECOVERY = info(
+                Columns.TABLE_SETTINGS_RECOVERY, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS = info(
+                Columns.TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_WARMER = info(
+                Columns.TABLE_SETTINGS_WARMER, DataTypes.OBJECT);
+        public static final ReferenceInfo TABLE_SETTINGS_WARMER_ENABLED = info(
+                Columns.TABLE_SETTINGS_WARMER_ENABLED, DataTypes.OBJECT);
     }
 
     private static ReferenceInfo info(ColumnIdent columnIdent, DataType dataType) {

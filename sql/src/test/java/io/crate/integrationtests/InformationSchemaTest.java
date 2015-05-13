@@ -777,8 +777,11 @@ public class InformationSchemaTest extends SQLTransportIntegrationTest {
         execute("create table table_props (name string) with (number_of_replicas=0)");
         execute("select settings from information_schema.tables where table_name='table_props'");
         assertEquals("{"+
-                        "translog={disable_flush=false, flush_threshold_period=30m, flush_threshold_ops=2147483647, flush_threshold_size=200mb}, "+
-                        "blocks={metadata=false, read=false, read_only=false, write=false}"+
+                        "warmer={enabled=true}, " +
+                        "translog={flush_threshold_ops=2147483647, flush_threshold_size=200mb, flush_threshold_period=30m, disable_flush=false, interval=5s}, "+
+                        "blocks={read_only=false, write=false, read=false, metadata=false}, "+
+                        "routing.allocation={enable=all, total_shards_per_node=-1}, " +
+                        "recovery={initial_shards=quorum}"+
                         "}",
 
                 response.rows()[0][0].toString());
