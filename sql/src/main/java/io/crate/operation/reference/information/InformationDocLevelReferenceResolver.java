@@ -54,6 +54,7 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
                 InformationTablesExpression.BLOB_PATH_EXPRESSION);
         builder.put(InformationTablesExpression.SETTINGS_EXPRESSION.info().ident(),
                 InformationTablesExpression.SETTINGS_EXPRESSION);
+        // child implementations missing!
 
                 // information_schema.columns
         builder.put(InformationColumnsExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
