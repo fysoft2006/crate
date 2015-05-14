@@ -24,8 +24,12 @@ package io.crate.operation.reference.information;
 import com.google.common.collect.ImmutableMap;
 import io.crate.metadata.*;
 import io.crate.operation.reference.DocLevelReferenceResolver;
+import io.crate.operation.reference.RowCollectNestedObjectExpression;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.inject.Singleton;
+
+import java.util.Collection;
+import java.util.Map;
 
 @Singleton
 public class InformationDocLevelReferenceResolver implements DocLevelReferenceResolver<RowCollectExpression<?, ?>> {
@@ -53,8 +57,10 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
                 InformationTablesExpression.BLOB_PATH_EXPRESSION);
         builder.put(InformationTablesExpression.SETTINGS_EXPRESSION.info().ident(),
                 InformationTablesExpression.SETTINGS_EXPRESSION);
+        addChildImplementationToBuilder(builder, InformationTablesExpression.SETTINGS_EXPRESSION);
 
-                // information_schema.columns
+
+        // information_schema.columns
         builder.put(InformationColumnsExpression.SCHEMA_NAME_EXPRESSION.info().ident(),
                 InformationColumnsExpression.SCHEMA_NAME_EXPRESSION);
         builder.put(InformationColumnsExpression.TABLE_NAME_EXPRESSION.info().ident(),
@@ -101,6 +107,19 @@ public class InformationDocLevelReferenceResolver implements DocLevelReferenceRe
                 InformationSchemataExpression.SCHEMA_NAME_EXPRESSION);
 
         implementations = builder.build();
+    }
+
+
+    private void addChildImplementationToBuilder(ImmutableMap.Builder<ReferenceIdent, RowCollectExpression<?, ?>> builder, RowCollectNestedObjectExpression parent) {
+        for (Map.Entry<String, ReferenceImplementation> e : parent.getChildImplementations().entrySet()) {
+            if (e.getValue() instanceof RowCollectNestedObjectExpression) {
+                addChildImplementationToBuilder(builder, (RowCollectNestedObjectExpression) e.getValue());
+            }
+            if (e.getValue() instanceof RowCollectExpression) {
+                ReferenceIdent ident = ((RowCollectExpression)e.getValue()).info().ident();
+                builder.put(ident, (RowCollectExpression) e.getValue());
+            }
+        }
     }
 
     @Override

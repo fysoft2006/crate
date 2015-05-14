@@ -34,8 +34,6 @@ public abstract class RowCollectNestedObjectExpression<R> extends NestedObjectEx
     protected final ReferenceInfo info;
     protected R row;
 
-    protected final Map<String, RowCollectExpression> childImplementations = new HashMap<>();
-
     public RowCollectNestedObjectExpression(ReferenceInfo info) {
         this.info = info;
     }
@@ -52,8 +50,10 @@ public abstract class RowCollectNestedObjectExpression<R> extends NestedObjectEx
     @Override
     public Map<String,Object> value() {
         Map<String, Object> map = new HashMap<>();
-        for (Map.Entry<String, RowCollectExpression> e : childImplementations.entrySet()) {
-            e.getValue().setNextRow(this.row);
+        for (Map.Entry<String, ReferenceImplementation> e : childImplementations.entrySet()) {
+            if (e.getValue() instanceof RowCollectExpression) {
+                ((RowCollectExpression) e.getValue()).setNextRow(this.row);
+            }
             Object value = e.getValue().value();
 
             // convert nested columns of type e.getValue().value() to String here

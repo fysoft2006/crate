@@ -22,7 +22,6 @@
 package io.crate.metadata.information;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import io.crate.metadata.ColumnIdent;
 import io.crate.metadata.ReferenceIdent;
 import io.crate.metadata.ReferenceInfo;
@@ -49,7 +48,6 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ColumnIdent BLOBS_PATH = new ColumnIdent("blobs_path");
 
         public static final ColumnIdent TABLE_SETTINGS = new ColumnIdent("settings");
-
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS = new ColumnIdent("settings",
                 ImmutableList.of("blocks"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_READ_ONLY = new ColumnIdent("settings",
@@ -60,12 +58,14 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("blocks", "write"));
         public static final ColumnIdent TABLE_SETTINGS_BLOCKS_METADATA = new ColumnIdent("settings",
                 ImmutableList.of("blocks", "metadata"));
+        public static final ColumnIdent TABLE_SETTINGS_ROUTING= new ColumnIdent("settings",
+                ImmutableList.of("routing"));
         public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION = new ColumnIdent("settings",
-                ImmutableList.of("routing_allocation"));
+                ImmutableList.of("routing", "allocation"));
         public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE = new ColumnIdent("settings",
-                ImmutableList.of("routing_allocation", "enable"));
+                ImmutableList.of("routing", "allocation", "enable"));
         public static final ColumnIdent TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE = new ColumnIdent("settings",
-                ImmutableList.of("routing_allocation", "total_shards_per_node"));
+                ImmutableList.of("routing", "allocation", "total_shards_per_node"));
         public static final ColumnIdent TABLE_SETTINGS_RECOVERY = new ColumnIdent("settings",
                 ImmutableList.of("recovery"));
         public static final ColumnIdent TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS = new ColumnIdent("settings",
@@ -74,8 +74,6 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                 ImmutableList.of("warmer"));
         public static final ColumnIdent TABLE_SETTINGS_WARMER_ENABLED = new ColumnIdent("settings",
                 ImmutableList.of("warmer", "enabled"));
-
-
         public static final ColumnIdent TABLE_SETTINGS_TRANSLOG = new ColumnIdent("settings",
                 ImmutableList.of("translog"));
         public static final ColumnIdent TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_OPS = new ColumnIdent("settings",
@@ -125,6 +123,8 @@ public class InformationTablesTableInfo extends InformationTableInfo {
         public static final ReferenceInfo TABLE_SETTINGS_TRANSLOG_INTERVAL = info(
                 Columns.TABLE_SETTINGS_TRANSLOG_INTERVAL, DataTypes.LONG);
 
+        public static final ReferenceInfo TABLE_SETTINGS_ROUTING= info(
+                Columns.TABLE_SETTINGS_ROUTING, DataTypes.OBJECT);
         public static final ReferenceInfo TABLE_SETTINGS_ROUTING_ALLOCATION = info(
                 Columns.TABLE_SETTINGS_ROUTING_ALLOCATION, DataTypes.OBJECT);
         public static final ReferenceInfo TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE = info(
@@ -170,6 +170,7 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                     put(Columns.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD, ReferenceInfos.TABLE_SETTINGS_TRANSLOG_FLUSH_THRESHOLD_PERIOD);
                     put(Columns.TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH, ReferenceInfos.TABLE_SETTINGS_TRANSLOG_DISABLE_FLUSH);
                     put(Columns.TABLE_SETTINGS_TRANSLOG_INTERVAL, ReferenceInfos.TABLE_SETTINGS_TRANSLOG_INTERVAL);
+                    put(Columns.TABLE_SETTINGS_ROUTING, ReferenceInfos.TABLE_SETTINGS_ROUTING);
                     put(Columns.TABLE_SETTINGS_ROUTING_ALLOCATION, ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION);
                     put(Columns.TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE, ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION_ENABLE);
                     put(Columns.TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE, ReferenceInfos.TABLE_SETTINGS_ROUTING_ALLOCATION_TOTAL_SHARDS_PER_NODE);
@@ -177,7 +178,17 @@ public class InformationTablesTableInfo extends InformationTableInfo {
                     put(Columns.TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS, ReferenceInfos.TABLE_SETTINGS_RECOVERY_INITIAL_SHARDS);
                     put(Columns.TABLE_SETTINGS_WARMER, ReferenceInfos.TABLE_SETTINGS_WARMER);
                     put(Columns.TABLE_SETTINGS_WARMER_ENABLED, ReferenceInfos.TABLE_SETTINGS_WARMER_ENABLED);
-                }}
+                }},
+                ImmutableList.of(
+                        ReferenceInfos.SCHEMA_NAME,
+                        ReferenceInfos.TABLE_NAME,
+                        ReferenceInfos.NUMBER_OF_SHARDS,
+                        ReferenceInfos.NUMBER_OF_REPLICAS,
+                        ReferenceInfos.CLUSTERED_BY,
+                        ReferenceInfos.PARTITIONED_BY,
+                        ReferenceInfos.BLOBS_PATH,
+                        ReferenceInfos.TABLE_SETTINGS
+                )
         );
     }
 }

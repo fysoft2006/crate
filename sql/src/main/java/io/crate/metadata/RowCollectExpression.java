@@ -29,5 +29,6 @@ import io.crate.metadata.ReferenceImplementation;
  */
 public interface RowCollectExpression<R, T> extends ReferenceImplementation<T> {
 
+    ReferenceInfo info();
     void setNextRow(R row);
 }
